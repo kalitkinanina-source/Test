@@ -1,0 +1,519 @@
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Газоперерабатывающий комплекс · ГПК</title>
+  <style>
+    /* ------ ГЛОБАЛЬНЫЕ СТИЛИ И ПЕРЕМЕННЫЕ ------ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gradient-start: #0b3b5c;
+      --gradient-mid: #1f6e8c;
+      --gradient-end: #2aa5a0;
+      --accent: #f5b042;
+      --accent-light: #ffd966;
+      --accent-glow: rgba(245, 176, 66, 0.25);
+      --bg-dark: #0f1a24;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border-light: rgba(255, 255, 255, 0.08);
+      --text-primary: #eef4f9;
+      --text-secondary: #b4ccda;
+      --shadow-card: 0 15px 30px -10px rgba(0, 0, 0, 0.6);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: radial-gradient(circle at 20% 20%, #132b38, #0b141c 90%);
+      color: var(--text-primary);
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1280px;
+      width: 100%;
+    }
+
+    /* ------ ГРАДИЕНТНЫЙ ЗАГОЛОВОК С ПРОЗРАЧНОСТЬЮ ------ */
+    .hero-title {
+      font-size: clamp(2.2rem, 7vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+      background: linear-gradient(135deg, #b3e5fc 0%, #7ed6df 30%, #f5d98f 70%, #f7b731 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 4px 20px rgba(0, 180, 255, 0.2);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      border-radius: 4px;
+    }
+
+    .subhead {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+      margin-bottom: 3rem;
+      font-weight: 400;
+      border-left: 4px solid var(--accent);
+      padding-left: 1.2rem;
+      background: linear-gradient(90deg, rgba(245, 176, 66, 0.06), transparent);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ------ СЕТКА ДЛЯ КАРТОЧЕК НАВЫКОВ (ПРОДУКТЫ/ПРОЦЕССЫ) ------ */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin: 2.5rem 0 3rem;
+    }
+
+    .skill-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 1.4rem 1.2rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+      box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
+      color: var(--text-primary);
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.01em;
+      cursor: default;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(42, 165, 160, 0.15), rgba(245, 176, 66, 0.08));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(245, 176, 66, 0.5);
+      box-shadow: 0 25px 30px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(245, 176, 66, 0.3);
+    }
+
+    .skill-card:hover::before {
+      opacity: 1;
+    }
+
+    .skill-card span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .skill-card .icon {
+      font-size: 1.6rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 6px rgba(245, 176, 66, 0.6));
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ------ БЛОКИ КЕЙСОВ (ПЛОЩАДКИ / ПРОИЗВОДСТВА) ------ */
+    .case-block {
+      background: linear-gradient(145deg, rgba(20, 40, 55, 0.9), rgba(10, 22, 30, 0.95));
+      border-radius: var(--radius-lg);
+      padding: 2rem 2rem 1.8rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(245, 176, 66, 0.25);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .case-block:hover {
+      border-color: rgba(245, 176, 66, 0.55);
+    }
+
+    .case-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .case-badge {
+      background: linear-gradient(135deg, var(--accent), #e09d2b);
+      color: #0a0f14;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 18px var(--accent-glow);
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .case-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(120deg, #d9ecff, #b4d9e8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.01em;
+    }
+
+    .case-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem 1.8rem;
+      list-style: none;
+      margin-top: 0.8rem;
+    }
+
+    .case-list li {
+      position: relative;
+      padding-left: 1.6rem;
+      font-size: 1rem;
+      color: #d3e3ed;
+      font-weight: 400;
+      line-height: 1.5;
+      width: calc(50% - 1rem);
+      min-width: 220px;
+      transition: color 0.2s;
+    }
+
+    .case-list li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.2rem;
+      line-height: 1.3;
+      text-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    /* ------ СЕТКА ИНСТРУМЕНТОВ (ТЕГИ) ------ */
+    .tags-section {
+      margin: 3rem 0 1.5rem;
+    }
+
+    .tags-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-secondary);
+      margin-bottom: 1.3rem;
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 0.6rem;
+    }
+
+    .tags-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 0.9rem;
+    }
+
+    .tag {
+      background: rgba(42, 165, 160, 0.12);
+      border: 1px solid rgba(42, 165, 160, 0.35);
+      padding: 0.6rem 1.4rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #b8e6e3;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(2px);
+    }
+
+    .tag:hover {
+      background: rgba(245, 176, 66, 0.15);
+      border-color: var(--accent);
+      color: #ffe4a8;
+      transform: scale(1.04) translateY(-2px);
+      box-shadow: 0 8px 18px -6px rgba(245, 176, 66, 0.4);
+    }
+
+    /* ------ АКЦЕНТНЫЕ ЭЛЕМЕНТЫ, ВВОДНЫЙ ТЕКСТ ------ */
+    .intro-highlight {
+      background: linear-gradient(95deg, rgba(42, 165, 160, 0.12) 0%, rgba(42, 165, 160, 0.02) 100%);
+      border-left: 6px solid var(--accent);
+      padding: 1.6rem 2rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 2rem 0 2.5rem;
+      font-size: 1.1rem;
+      color: #d4e9f2;
+      font-weight: 400;
+      line-height: 1.6;
+      box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    .intro-highlight strong {
+      color: var(--accent-light);
+      font-weight: 700;
+      text-shadow: 0 0 12px rgba(245, 176, 66, 0.3);
+    }
+
+    /* ------ АДАПТИВНОСТЬ ------ */
+    @media (max-width: 700px) {
+      body {
+        padding: 1.2rem 1rem;
+      }
+
+      .hero-title {
+        font-size: 2.2rem;
+      }
+
+      .subhead {
+        font-size: 1rem;
+        padding-left: 0.8rem;
+      }
+
+      .case-block {
+        padding: 1.5rem 1.2rem;
+      }
+
+      .case-title {
+        font-size: 1.4rem;
+      }
+
+      .case-list li {
+        width: 100%;
+        min-width: unset;
+        font-size: 0.95rem;
+      }
+
+      .skill-card {
+        padding: 1rem;
+        font-size: 0.95rem;
+      }
+
+      .tag {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+      }
+
+      .intro-highlight {
+        padding: 1.2rem;
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .case-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .case-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.9rem;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* анимация появления */
+    .fade-up {
+      animation: fadeUp 0.6s ease backwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* уточнение для широких экранов */
+    @media (min-width: 1300px) {
+      .case-list li {
+        width: calc(33.33% - 1.5rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ГРАДИЕНТНЫЙ ЗАГОЛОВОК -->
+    <h1 class="hero-title">Газоперерабатывающий комплекс</h1>
+    <div class="subhead">
+      Переработка этансодержащего газа · 45 млрд м³/год · СПГ · СУГ · морская отгрузка
+    </div>
+
+    <!-- ВВОДНЫЙ АКЦЕНТНЫЙ БЛОК -->
+    <div class="intro-highlight">
+      <strong>Назначение ГПК</strong> — переработка этансодержащего газа из магистрального газопровода в объёме до 45 млрд ст. м³/год, получение товарной продукции, хранение и отгрузка СПГ, СУГ и перевалка изотермическим способом для экспорта судами-газовозами.
+    </div>
+
+    <!-- ТОВАРНЫЕ ПРОДУКТЫ: КАРТОЧКИ НАВЫКОВ (АНИМАЦИЯ ПРИ НАВЕДЕНИИ) -->
+    <div style="margin: 1.5rem 0 0.5rem;">
+      <span style="font-size: 1.1rem; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.15em;">Товарные продукты</span>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card"><span class="icon">⛽</span><span>Метановая фракция</span></div>
+      <div class="skill-card"><span class="icon">❄️</span><span>СПГ (сжиженный природный газ)</span></div>
+      <div class="skill-card"><span class="icon">🔥</span><span>Этановая фракция</span></div>
+      <div class="skill-card"><span class="icon">🛢️</span><span>Пропан технический</span></div>
+      <div class="skill-card"><span class="icon">🧪</span><span>Бутан технический</span></div>
+      <div class="skill-card"><span class="icon">⚗️</span><span>Пропан-бутан технический</span></div>
+      <div class="skill-card"><span class="icon">🧴</span><span>Пентан-гексановая фракция</span></div>
+    </div>
+
+    <!-- КЕЙСЫ (ПЛОЩАДКИ) В ВЫДЕЛЕННЫХ БЛОКАХ -->
+    <div class="tags-section" style="margin-top: 2rem;">
+      <div class="tags-title">Состав комплекса · ключевые объекты</div>
+    </div>
+
+    <!-- 1. Площадка ГПЗ -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <span class="case-badge">01 · ГПЗ</span>
+        <span class="case-title">Площадка газоперерабатывающего завода</span>
+      </div>
+      <ul class="case-list">
+        <li>Четыре установки аминовой очистки газа от кислых компонентов</li>
+        <li>Четыре установки глубокой осушки газа</li>
+        <li>Четыре установки низкотемпературного разделения газа</li>
+        <li>Две установки захолаживания газа</li>
+        <li>Две установки очистки и газофракционирования ШФЛУ</li>
+        <li>Две дожимные компрессорные станции метановой фракции</li>
+        <li>Узел коммерческого учёта метановой фракции</li>
+        <li>Узел коммерческого учёта этановой, пропановой фракции и топливного газа</li>
+        <li>Азотно-воздушная станция</li>
+        <li>Установка подготовки технологического газа</li>
+        <li>Факельная система ГПЗ</li>
+        <li>Котельная ОЗХ</li>
+        <li>Административные здания, склады, здания служб снабжения</li>
+      </ul>
+    </div>
+
+    <!-- 2. Товарно-сырьевая база СПГ, СУГ и ПГФ -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <span class="case-badge">02 · ТСБ</span>
+        <span class="case-title">Товарно-сырьевая база СПГ, СУГ и ПГФ</span>
+      </div>
+      <ul class="case-list">
+        <li>Резервуарный парк СУГ, ПГФ под давлением</li>
+        <li>Установка захолаживания и термостатирования СУГ (4 линии)</li>
+        <li>Железнодорожная эстакада налива ПГФ</li>
+        <li>Изотермический парк СУГ</li>
+        <li>Изотермический парк СПГ</li>
+        <li>Факельная система высокого и низкого давления</li>
+        <li>Пожарное депо с аварийно-спасательными формированиями</li>
+        <li>Насосная станция хозяйственно-питьевого водоснабжения</li>
+        <li>Котельная ТСБ</li>
+        <li>Система утилизации отпарных газов СПГ</li>
+        <li>Факельная система отпарного газа</li>
+        <li>Воздушная компрессорная станция</li>
+      </ul>
+    </div>
+
+    <!-- 3. Производство СПГ -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <span class="case-badge">03 · СПГ</span>
+        <span class="case-title">Производство СПГ</span>
+      </div>
+      <ul class="case-list">
+        <li>Установка получения азота высокой чистоты</li>
+        <li>Узел подачи этана и ПТ в метановую фракцию на завод СПГ</li>
+        <li>Установка сжижения</li>
+        <li>Резервуарный парк хладагента</li>
+        <li>Факельная система СПГ</li>
+      </ul>
+    </div>
+
+    <!-- 4. Морской отгрузочный терминал -->
+    <div class="case-block fade-up">
+      <div class="case-header">
+        <span class="case-badge">04 · МОТ</span>
+        <span class="case-title">Морской отгрузочный терминал</span>
+      </div>
+      <ul class="case-list">
+        <li>Два идентичных причала отгрузки СПГ</li>
+        <li>Причал отгрузки СУГ</li>
+      </ul>
+    </div>
+
+    <!-- Инфраструктурные объекты (в виде тегов + акцентные блоки) -->
+    <div class="case-block fade-up" style="margin-top: 1rem;">
+      <div class="case-header">
+        <span class="case-badge">05 · Инфраструктура</span>
+        <span class="case-title">Межцеховые эстакады, ВЛ, автодороги</span>
+      </div>
+      <ul class="case-list">
+        <li>Межцеховая эстакада от основной площадки до ТСБ</li>
+        <li>Межцеховая эстакада от ТСБ до МОТ</li>
+        <li>ВЛ 110 кВ от ГПЗ до ТСБ</li>
+        <li>Подъездные автодороги</li>
+      </ul>
+    </div>
+
+    <!-- СЕТКА ИНСТРУМЕНТОВ / ТЕГОВ (дополнительные акценты) -->
+    <div class="tags-section" style="margin-top: 2.8rem;">
+      <div class="tags-title">Технологические узлы · ключевые теги</div>
+      <div class="tags-grid">
+        <span class="tag">Аминовая очистка</span>
+        <span class="tag">Глубокая осушка</span>
+        <span class="tag">Низкотемпературное разделение</span>
+        <span class="tag">Захолаживание газа</span>
+        <span class="tag">Газофракционирование ШФЛУ</span>
+        <span class="tag">Дожимные компрессорные</span>
+        <span class="tag">Коммерческий учёт</span>
+        <span class="tag">Азотно-воздушная станция</span>
+        <span class="tag">Факельная система</span>
+        <span class="tag">Изотермическое хранение</span>
+        <span class="tag">СПГ · СУГ · ПГФ</span>
+        <span class="tag">Морской терминал</span>
+        <span class="tag">ВЛ 110 кВ</span>
+        <span class="tag">Эстакады</span>
+        <span class="tag">Котельные · ОЗХ · ТСБ</span>
+        <span class="tag">Рефрижераторные газовозы</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
